@@ -1,0 +1,39 @@
+# Use root/mysql as user/password credentials
+version: '3.1'
+
+services:
+  db:
+    container_name: mydb
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql 
+    ports:
+      - 3307:3306
+    networks:
+      - my-bridge
+    build: 
+      dockerfile: Dockerfile.db
+    volumes: 
+     - ./dbdata:/var/lib/mysql
+  php-apache:
+    container_name: myphp
+    image: php:8.1-rc-apache-bullseye
+    restart: always
+    ports:
+      - 80:80
+    networks:
+      - my-bridge
+    build: 
+      dockerfile: Dockerfile.php
+    volumes:
+     #- ./path/to/index.php:/var/www/html/index.php
+     # /var/www/html :đồng bộ hóa nội dung từ thư mục hiện tại vào bên trong vùng chứa
+      - ./:/var/www/html
+      - ./null:/var/www/html/dbdata
+networks:
+ my-bridge:
+  name: mybridge
+volumes:
+ dbdata:
+   name: mydata
