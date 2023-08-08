@@ -12,13 +12,13 @@ services:
       - 3307:3306
     networks:
       - my-bridge
-    build: 
+    build:
       dockerfile: Dockerfile.db
     volumes: 
      - ./dbdata:/var/lib/mysql
   php-apache:
     container_name: myphp
-    image: php:8.1-rc-apache-bullseye
+    image: php:8.2
     restart: always
     ports:
       - 80:80
@@ -27,8 +27,6 @@ services:
     build: 
       dockerfile: Dockerfile.php
     volumes:
-     #- ./path/to/index.php:/var/www/html/index.php
-     # /var/www/html :đồng bộ hóa nội dung từ thư mục hiện tại vào bên trong vùng chứa
       - ./:/var/www/html
       - ./null:/var/www/html/dbdata
 networks:
